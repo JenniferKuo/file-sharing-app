@@ -24,4 +24,4 @@ aws:
     bucketName: ${S3_BUCKET_NAME}
 
 app:
-  backend-url: http://localhost:5555
+  backend-url: ${BACKEND_URL:http://localhost:5555}

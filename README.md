@@ -20,21 +20,24 @@ Follow these steps to set up the File Sharing System on your local machine.
 
 **1. Clone the Repository**
 ```bash
-git clone <repository-url>
+git clone https://github.com/JenniferKuo/file-sharing-app.git
 cd file-sharing-app
 ```
 **2. Setup Environment Variables**
 Create a .env file in the root directory and add the following environment variables:
 
 ```ini
-MONGO_ROOT_USERNAME=rootuser
-MONGO_ROOT_PASSWORD=rootpass
-MONGO_USER=user1
-MONGO_PASSWORD=password1
+MONGO_ROOT_USERNAME=your-rootuser
+MONGO_ROOT_PASSWORD=your-rootpass
+MONGO_USER=your-user
+MONGO_PASSWORD=your-password
+
 AWS_ACCESS_KEY_ID=your-aws-access-key
 AWS_SECRET_ACCESS_KEY=your-aws-secret-key
 AWS_REGION=your-aws-region
 S3_BUCKET_NAME=your-s3-bucket-name
+
+BACKEND_URL=your-backend-domain-url
 ```
 Replace the placeholder values with your actual AWS credentials and MongoDB configuration.
 
@@ -53,6 +56,12 @@ After starting the containers, the application will be accessible at:
 
 - Frontend: http://localhost:3333
 - Backend: http://localhost:5555
+- MongoDB Express: http://localhost:4444 (for database management)
+- MongoDB: http://localhost:27017
 
 ## Usage
 Now that your File Sharing System is up and running, you can start uploading and sharing files.
+
+**Demo Page**
+1. You can access http://localhost:3333 to upload a file, and then click generate link to get the sharing link.
+![Alt text](demo.png)
