@@ -1,23 +1,18 @@
 package org.example.service;
 
-import org.example.dto.GenerateLinkResponse;
-import org.example.exception.LinkExpiredException;
-import org.example.exception.ResourceNotFoundException;
 import org.example.entity.FileInfo;
 import org.example.entity.LinkInfo;
-import org.springframework.beans.factory.annotation.Value;
+import org.example.exception.LinkExpiredException;
+import org.example.exception.ResourceNotFoundException;
+import org.example.repository.FileInfoRepository;
+import org.example.repository.LinkInfoRepository;
+import org.example.utils.RandomStringGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.example.repository.LinkInfoRepository;
-import org.example.repository.FileInfoRepository;
-
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-
-import org.bson.types.ObjectId;
 
 @Service
 public class LinkService {
@@ -28,11 +23,8 @@ public class LinkService {
     @Autowired
     private FileInfoRepository fileInfoRepository;
 
-    @Value("${app.backend-url}")
-    private String backendUrl;
-
-
-    private static final String BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    @Autowired
+    private RandomStringGenerator randomStringGenerator;
 
     public FileInfo accessLink(String link) {
         LinkInfo linkInfo = linkInfoRepository.findBySharingLink(link)
@@ -46,9 +38,9 @@ public class LinkService {
                 .orElseThrow(() -> new ResourceNotFoundException("Associated file not found"));
     }
 
-    public GenerateLinkResponse generateLink(String fileId) {
+    public LinkInfo generateLink(String fileId) {
         // Assuming you have a method to generate a random Base62 string
-        String randomString = generateRandomBase62String();
+        String randomString = randomStringGenerator.generateRandomBase62String();
         Date expireTime = Date.from(LocalDateTime.now().plusDays(7).atZone(ZoneId.systemDefault()).toInstant());
         // Create and save link information in database
         LinkInfo linkInfo = new LinkInfo();
@@ -57,29 +49,6 @@ public class LinkService {
         linkInfo.setExpireTime(expireTime);
         linkInfoRepository.save(linkInfo);
 
-        return GenerateLinkResponse.builder()
-                .sharingLink(backendUrl + "/api/links/" + randomString)
-                .expireTime(expireTime)
-                .build();
-    }
-
-    public String generateRandomBase62String() {
-        ObjectId objectId = new ObjectId();
-        return base62Encode(objectId.toByteArray());
-    }
-
-    private String base62Encode(byte[] input) {
-        StringBuilder base62 = new StringBuilder();
-
-        // Convert the string to a big integer
-        BigInteger bigInteger = new BigInteger(1, input);
-
-        while (bigInteger.compareTo(BigInteger.ZERO) > 0) {
-            int remainder = bigInteger.mod(BigInteger.valueOf(62)).intValue();
-            base62.append(BASE62.charAt(remainder));
-            bigInteger = bigInteger.divide(BigInteger.valueOf(62));
-        }
-
-        return base62.reverse().toString();
+        return linkInfo;
     }
 }

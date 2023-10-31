@@ -9,6 +9,7 @@ import org.example.entity.LinkInfo;
 import org.example.service.FileService;
 import org.example.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,11 +26,18 @@ public class LinkController {
     @Autowired
     private FileService fileService;
 
+    @Value("${app.backend-url}")
+    private String backendUrl;
+
     @PostMapping("/generate")
     public ResponseEntity<?> generateLink(@RequestBody GenerateLinkRequest linkRequest) {
         try {
             // Logic to generate link
-            GenerateLinkResponse response = linkService.generateLink(linkRequest.getFileId());
+            LinkInfo linkInfo = linkService.generateLink(linkRequest.getFileId());
+            GenerateLinkResponse response = GenerateLinkResponse.builder()
+                    .sharingLink(backendUrl + "/api/links/" + linkInfo.getSharingLink())
+                    .expireTime(linkInfo.getExpireTime())
+                    .build();
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
