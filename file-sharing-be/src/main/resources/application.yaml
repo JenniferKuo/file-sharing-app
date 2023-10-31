@@ -1,0 +1,27 @@
+server:
+  port: 5555
+
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: file_sharing
+      host: localhost
+      port: 27017
+      username: ${MONGO_USER}
+      password: ${MONGO_PASSWORD}
+      auto-index-creation: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+aws:
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretKey: ${AWS_SECRET_ACCESS_KEY}
+  region: ${AWS_REGION}
+  s3:
+    bucketName: ${S3_BUCKET_NAME}
+
+app:
+  backend-url: http://localhost:5555
