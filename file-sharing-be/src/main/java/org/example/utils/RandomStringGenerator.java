@@ -1,9 +1,11 @@
 package org.example.utils;
 
 import org.bson.types.ObjectId;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 
+@Component
 public class RandomStringGenerator {
     private static final String BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
