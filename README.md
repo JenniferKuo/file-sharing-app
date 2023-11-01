@@ -50,7 +50,7 @@ docker-compose build
 **4. Start the Containers**
 ```bash
 docker-compose up -d
-``````
+```
 **5. Access the Application**
 After starting the containers, the application will be accessible at:
 
@@ -63,5 +63,47 @@ After starting the containers, the application will be accessible at:
 Now that your File Sharing System is up and running, you can start uploading and sharing files.
 
 **Demo Page**
-1. You can access http://localhost:3333 to upload a file, and then click generate link to get the sharing link.
+1. You can access http://localhost:3333 to use the user interface to upload a file, and then click generate link to get the sharing link.
 ![Alt text](demo.png)
+
+**API Endpoints**
+You can also use the service without user interface, but using the APIs provided by the backend service directly.
+
+Backend: http://localhost:5555
+
+1. POST /api/files/upload
+Handles file uploads and returns file information.
+    
+    ```json
+    Request:
+    {
+        "file": "demo.txt"
+    }
+    
+    Response:
+    {
+        "id": "65400c234d55be060a25036a",
+        "fileName": "demo.txt",
+        "size": 24
+    }
+    ```
+    
+2. POST /api/links/generate
+Generates a sharing link based on the file ID and returns link information.
+
+    
+    ```json
+    Request:
+    {
+        "fileId": "65400c234d55be060a25036a"
+    }
+    
+    Response:
+    {
+        "sharingLink": "http://localhost:5555/api/links/ekgilKyOPOGvHdoh",
+        "expireTime": "2023-11-06T20:04:22.976+00:00"
+    }
+    ```
+    
+3. GET /api/links/{link}
+Accesses a sharing link and download the file, or return an error message.
