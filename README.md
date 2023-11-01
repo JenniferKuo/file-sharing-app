@@ -65,6 +65,7 @@ Now that your File Sharing System is up and running, you can start uploading and
 **Demo Page**
 1. You can access http://localhost:3333 to use the user interface to upload a file, and then click generate link to get the sharing link.
 ![Alt text](demo.png)
+2. Access the sharing link before the expire time, will allow user to download the file.
 
 **API Endpoints**
 You can also use the service without user interface, but using the APIs provided by the backend service directly.
@@ -73,37 +74,38 @@ Backend: http://localhost:5555
 
 1. POST /api/files/upload
 Handles file uploads and returns file information.
-    
-    ```json
-    Request:
-    {
-        "file": "demo.txt"
-    }
-    
-    Response:
-    {
-        "id": "65400c234d55be060a25036a",
-        "fileName": "demo.txt",
-        "size": 24
-    }
-    ```
+
+Request:
+```json
+{
+    "file": "demo.txt"
+}
+```
+Response:
+```json
+{
+    "id": "65400c234d55be060a25036a",
+    "fileName": "demo.txt",
+    "size": 24
+}
+```
     
 2. POST /api/links/generate
 Generates a sharing link based on the file ID and returns link information.
 
-    
-    ```json
-    Request:
-    {
-        "fileId": "65400c234d55be060a25036a"
-    }
-    
-    Response:
-    {
-        "sharingLink": "http://localhost:5555/api/links/ekgilKyOPOGvHdoh",
-        "expireTime": "2023-11-06T20:04:22.976+00:00"
-    }
-    ```
+Request:
+```json
+{
+    "fileId": "65400c234d55be060a25036a"
+}
+```
+Response:
+```json
+{
+    "sharingLink": "http://localhost:5555/api/links/ekgilKyOPOGvHdoh",
+    "expireTime": "2023-11-06T20:04:22.976+00:00"
+}
+```
     
 3. GET /api/links/{link}
 Accesses a sharing link and download the file, or return an error message.
