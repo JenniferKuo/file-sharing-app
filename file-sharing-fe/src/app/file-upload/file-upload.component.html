@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <title>File Upload</title>
+</head>
+
+<body>
+    <div class="ui container" style="margin-top: 50px;">
+        <h1 class="ui header">File Sharing System Demo Page</h1>
+        <div class="ui segment">
+            <input type="file" (change)="onFileSelected($event)" style="margin-bottom: 10px;" />
+            <button class="ui primary button" (click)="uploadFile()" *ngIf="!isUploading">Upload File</button>
+            <button class="ui loading button" *ngIf="isUploading">Uploading...</button>
+
+
+            <div class="ui message transition" *ngIf="uploadedFileInfo">
+                <p>File Name: {{ fileInfo.name }}</p>
+                <p>File Size: {{ fileInfo.size }} bytes</p>
+                <button class="ui secondary button" (click)="generateLink()" *ngIf="!isLoading"
+                    style="margin-top: 10px;">
+                    Generate Link
+                </button>
+            </div>
+
+            <div class="ui message transition" *ngIf="isLoading || shareLink">
+                <div class="ui active inverted dimmer" *ngIf="isLoading">
+                    <div class="ui text loader">Generating Link...</div>
+                </div>
+                <p>Sharing Link: <a href="{{ shareLink }}" target="_blank">{{ shareLink }}</a></p>
+                <p>Expire at: {{ expireTime | date:'medium' }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
