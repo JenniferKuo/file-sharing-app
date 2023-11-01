@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.dto.UploadFileResponse;
 import org.example.entity.FileInfo;
 import org.example.service.FileService;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/files")
+@Slf4j
 public class FileController {
 
     @Autowired
@@ -28,8 +30,10 @@ public class FileController {
                     .id(fileInfo.getId())
                     .size(fileInfo.getSize())
                     .build();
+            log.info("Upload file: " + fileInfo);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            log.error("Upload file failed: " + e.getMessage());
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
